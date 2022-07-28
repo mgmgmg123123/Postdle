@@ -40,8 +40,6 @@ export const mutations = {
       // ツイート内容を作成する
       console.log(state.userAnswerHistory)
 
-      console.log("ループ前")
-
       for (let i = 1; i <= state.countY; i++) {
         console.log("state.tweetText", state.tweetText)
         // state.tweetText = state.tweetText + "&#12306;"〒
@@ -49,27 +47,16 @@ export const mutations = {
 
         for (let j = 1; j <= state.countX; j++) {
           const element = document.querySelector("#historyItem" + i + "-" + j);
-          console.log("historyItem", "#historyItem" + i + "-" + j)
-          console.log("element", element)
           if (!element) {
-            console.log("リターン")
             continue
           }
           if (element.classList.contains("number-correct")) {
             console.log("きいろ")
             state.tweetText = state.tweetText + "🟨"
-
-
           } else if (element.classList.contains("number-place-correct")) {
             state.tweetText = state.tweetText + "🟩"
-
-            console.log("みどり")
-
           } else if (element.classList.contains("number-nothing")) {
             state.tweetText = state.tweetText + "⬛"
-
-            console.log("ぐれー")
-
           }
           if (j === 3) {
             state.tweetText = state.tweetText + "-"
@@ -89,19 +76,19 @@ export const mutations = {
     state.userNowAnswer = ["", "", "", "", "", "", ""]
     state.userAnswerHistory.push("")
   },
-  insert: function (state, number) {
-
+  insert: function (state, insertedNumber) {
     if (state.countX > 7) {
       return
     }
     if (state.countX <= 7) {
-      state.userNowAnswer[state.countX - 1] = number
+      state.userNowAnswer[state.countX - 1] = insertedNumber
     }
     // 最新の状況を反映
     state.userAnswerHistory[state.countY - 1] = state.userNowAnswer
     state.countX++
-    state.userNowAnswer.splice()
-    state.userAnswerHistory.splice()
+    state.userNowAnswer.splice();
+    state.userAnswerHistory.splice();
+    state.userAnswerHistory.splice();
   },
   reset: function (state) {
     const item = document.querySelectorAll("[id^='historyItem']");

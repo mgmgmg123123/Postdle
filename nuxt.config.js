@@ -1,5 +1,8 @@
+const Sass = require('sass')
+const Fiber = require('fibers')
+require('dotenv').config()
+const { GOOGLE_ANALYTICS_ID } = process.env;
 export default {
-  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'postdle',
     htmlAttrs: {
@@ -47,9 +50,28 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/google-gtag'
   ],
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
+  'google-gtag': {
+    id: process.env.GOOGLE_ANALYTICS_ID,
+    config: {
+      anonymize_ip: true,
+      send_page_view: false,
+    },
+    debug: true,
+    disableAutoPageTrack: true,
+  },
   build: {
+    loaders: {
+      scss: {
+        implementation: Sass,
+        sassOptions: {
+          fiber: Fiber
+        }
+      }
+    }
+  },
+  env: {
+    GOOGLE_ANALYTICS_ID
   }
 }

@@ -4,7 +4,7 @@
   </header>
 </template>
 <script lang="ts"></script>
-<style>
+<style lang="scss" scoped>
 header {
   background-color: #c27e6f;
   color: aliceblue;

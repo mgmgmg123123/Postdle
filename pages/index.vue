@@ -10,21 +10,23 @@
 
 <script lang="ts">
 import { Context } from "@nuxt/types";
-import Vue from "vue";
-import { Store } from "vuex";
-import { mapState } from "vuex";
 const axios = require("axios");
 const todofukenList = require("static/todofuken.json").todofukenList;
 const cityIndex = Math.floor(Math.random() * 47);
 const getCityListUrl = "http://geoapi.heartrails.com/api/json?method=getTowns";
 export default {
+  name: "Index",
+  metaInfo: {
+    // title will be injected into parent titleTemplate
+    title: "Index",
+  },
   data() {
     return {
       posts: [],
     };
   },
   async fetch(context: Context): Promise<void> {
-    const { app, store } = context;
+    const { store } = context;
     await axios
       .get(getCityListUrl, {
         params: {
@@ -42,7 +44,6 @@ export default {
         store.commit("answerSettings", res.data.response.location[postalIndex]);
       });
   },
-  methods: {},
 };
 </script>
 <style>
