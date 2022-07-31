@@ -7,5 +7,12 @@
   </section>
 </template>
 
-<script lang="ts"></script>
+<script>
+export default {
+  name: "SitePolicy",
+  metaInfo: {
+    title: "SitePolicy",
+  },
+};
+</script>
 <style></style>

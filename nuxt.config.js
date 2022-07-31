@@ -27,7 +27,8 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://unpkg.com/destyle.css@3.0.2/destyle.min.css' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c' },
+      { rel: 'apple-touch-icon', href: '/smartphone-icon.png' }
     ],
   },
 

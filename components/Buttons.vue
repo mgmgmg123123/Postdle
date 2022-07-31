@@ -1,6 +1,18 @@
 <template>
   <div class="buttons">
-    <ul class="number__list" v-if="!$store.state.clear">
+    <!-- 次の場合にボタンを非表示(false)にする。
+    1.10回回答済みで不正解のとき
+    2.クリアしたとき
+     -->
+    <ul
+      class="number__list"
+      v-if="
+        !(
+          (this.$store.state.overCount && this.$store.state.countY == 10) ||
+          this.$store.state.clear
+        )
+      "
+    >
       <li
         class="number__item"
         v-for="z in 10"
@@ -11,15 +23,29 @@
         <button>{{ z - 1 }}</button>
       </li>
     </ul>
-    <div class="operation-buttons">
+    <div
+      class="operation-buttons"
+      v-if="
+        !(
+          (this.$store.state.overCount && this.$store.state.countY == 10) ||
+          this.$store.state.clear
+        )
+      "
+    >
       <button class="operation-buttons__delate" @click="deleteNumber">
         １文字削除</button
-      ><button class="operation-buttons__answer" @click="answer">
+      ><button
+        class="operation-buttons__answer"
+        @click="answer($store.state.countY)"
+      >
         回答する
       </button>
     </div>
     <div class="operation-buttons__restart">
-      <button class="operation-buttons__restart" @click="reset">
+      <button
+        class="operation-buttons__restart"
+        @click="reset($store.state.countY)"
+      >
         別の問題を解く
       </button>
     </div>
@@ -30,19 +56,36 @@ export default {
   methods: {
     deleteNumber() {
       this.$store.dispatch("deleteNumber");
+      this.$gtag("event", "click", {
+        event_category: "playing",
+        event_label: "delete-button",
+        value: "",
+      });
     },
-    answer() {
+    answer(countY) {
       this.$store.dispatch("answer");
+      this.$gtag("event", "click", {
+        event_category: "playing",
+        event_label: "answer-button",
+        value: countY,
+      });
     },
     insert(number) {
       this.$store.dispatch("insert", number);
+      this.$gtag("event", "click", {
+        event_category: "playing",
+        event_label: "insert-button",
+        value: number,
+      });
     },
-    reset() {
+    reset(countY) {
       this.$store.dispatch("reset");
       this.$store.dispatch("answerSettings");
-    },
-    answerSettings() {
-      this.$store.dispatch("answerSettings");
+      this.$gtag("event", "click", {
+        event_category: "playing",
+        event_label: "reset-button",
+        value: countY,
+      });
     },
   },
 };

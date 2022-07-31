@@ -1,17 +1,17 @@
 <template>
   <footer>
-    <nuxt-link
+    <router-link
       to="/sitePolicy"
       v-if="this.$route.name !== 'sitePolicy'"
       class="link"
-      >サイトポリシー</nuxt-link
+      >サイトポリシー</router-link
     >
-    <nuxt-link to="/" v-if="this.$route.name !== 'index'" class="link"
-      >トップページ</nuxt-link
+    <router-link to="/" v-if="this.$route.name !== 'index'" class="link"
+      >トップページ</router-link
     >
   </footer>
 </template>
-<script lang="ts"></script>
+<script></script>
 <style lang="scss" scoped>
 footer {
   color: #776056;

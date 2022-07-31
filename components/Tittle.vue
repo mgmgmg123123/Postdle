@@ -1,9 +1,9 @@
 <template>
   <header>
-    <h1><nuxt-link to="/">Postdle</nuxt-link></h1>
+    <h1><router-link to="/">Postdle</router-link></h1>
   </header>
 </template>
-<script lang="ts"></script>
+<script></script>
 <style lang="scss" scoped>
 header {
   background-color: #c27e6f;

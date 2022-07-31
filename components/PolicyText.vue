@@ -50,7 +50,12 @@
           独自の文章及びアプリケーションソフトウェアの所有権及び知的財産権は、当方に帰属します。
         </p>
         <p>
-          各権利所有者におかれましては、万一掲載内容に問題がございましたら、ご本人様よりお問い合わせください。迅速に対応いたします。
+          各権利所有者におかれましては、万一掲載内容に問題がございましたら、以下のTwitterアカウントまで、ご本人様よりお問い合わせください。
+        </p>
+        <p>
+          <a href="https://twitter.com/mgmgmg123123" class="link"
+            >@mgmgmg123123</a
+          >
         </p>
       </div>
       <div class="policy__paragraph">
@@ -83,7 +88,7 @@
   </div>
 </template>
 
-<script lang="ts"></script>
+<script></script>
 <style lang="scss" scoped>
 HTML {
   font-family: "M PLUS Rounded 1c";
@@ -92,7 +97,7 @@ HTML {
 }
 .link {
   text-align: center;
-  font-size: 12px;
+  font-size: 16px;
   text-decoration: underline;
 }
 .source-link {

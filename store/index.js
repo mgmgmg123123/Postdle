@@ -6,6 +6,7 @@ export const state = () => ({
   userAnswerHistory: [""],
   userAnswerDistanceHistory: [""],
   clear: false,
+  overCount: false,
   answer: "",
   ansewrLocation: "",
   usersAnswer: "",
@@ -14,67 +15,24 @@ export const state = () => ({
 });
 export const mutations = {
   answer: function (state, distance) {
-    const items = document.querySelectorAll("[id^='historyItem" + state.countY + "']");
-
-    // 背景色を切り替える処理
-    for (let i = 0; i < state.userNowAnswer.length; i++) {
-      const reg = new RegExp(state.userNowAnswer[i]);
-      // 位置も数字もあっている場合
-      if (state.userNowAnswer[i] == state.answer.charAt(i)) {
-        items[i].classList.add("number-place-correct")
-      }
-      // 正解の数字が含まれている場合
-      else if (state.answer.match(reg) && state.userNowAnswer[i] !== "") {
-        items[i].classList.add("number-correct")
-      }
-      // 数字が含まれていない場合
-      else {
-        items[i].classList.add("number-nothing")
-      }
+    if (state.countY >= 10) {
+      state.overCount = true;
     }
     // クリアしているか答えとユーザーの回答を突合させる
-    if (state.answer === state.userNowAnswer.join('')) {
-      state.clear = !state.clear;
-      state.userAnswerDistanceHistory[state.countY - 1] = distance
-
-      // ツイート内容を作成する
-      console.log(state.userAnswerHistory)
-
-      for (let i = 1; i <= state.countY; i++) {
-        console.log("state.tweetText", state.tweetText)
-        // state.tweetText = state.tweetText + "&#12306;"〒
-        state.tweetText = state.tweetText + "〒"
-
-        for (let j = 1; j <= state.countX; j++) {
-          const element = document.querySelector("#historyItem" + i + "-" + j);
-          if (!element) {
-            continue
-          }
-          if (element.classList.contains("number-correct")) {
-            console.log("きいろ")
-            state.tweetText = state.tweetText + "🟨"
-          } else if (element.classList.contains("number-place-correct")) {
-            state.tweetText = state.tweetText + "🟩"
-          } else if (element.classList.contains("number-nothing")) {
-            state.tweetText = state.tweetText + "⬛"
-          }
-          if (j === 3) {
-            state.tweetText = state.tweetText + "-"
-          }
-        }
-        state.tweetText = state.tweetText + "\u000D\u000A"
+    if (state.answer === state.userNowAnswer.join('') || state.overCount) {
+      if (state.answer === state.userNowAnswer.join('')) {
+        state.clear = true
       }
-      state.tweetText = state.tweetText + "正解は" + state.ansewrLocation.prefecture + state.ansewrLocation.city + state.ansewrLocation.town + "の郵便番号でした。"
-      state.tweetText = "http://twitter.com/share?url=https://postdle.netlify.app/&text=" + encodeURI(state.tweetText) + "&hashtags=Postdle";
-
-      console.log("state.tweetText", state.tweetText)
+      state.userAnswerDistanceHistory[state.countY - 1] = distance
     } else {
       state.userAnswerDistanceHistory[state.countY - 1] = distance
-      state.countY++;
+      if (state.countY < 10) {
+        state.countY++;
+      }
       state.countX = 1;
+      state.userNowAnswer = ["", "", "", "", "", "", ""]
+      state.userAnswerHistory.push("")
     }
-    state.userNowAnswer = ["", "", "", "", "", "", ""]
-    state.userAnswerHistory.push("")
   },
   insert: function (state, insertedNumber) {
     if (state.countX > 7) {
@@ -88,18 +46,15 @@ export const mutations = {
     state.countX++
     state.userNowAnswer.splice();
     state.userAnswerHistory.splice();
-    state.userAnswerHistory.splice();
   },
   reset: function (state) {
     const item = document.querySelectorAll("[id^='historyItem']");
     if (item == false) {
-      console.log("resetにてタグ取得失敗")
       return;
     }
 
     for (let i = 0; i < item.length; i++) {
       if (item[i] !== false) {
-        item[i].innerText = "";
         item[i].classList.remove("number-place-correct");
         item[i].classList.remove("number-correct");
         item[i].classList.remove("number-nothing");
@@ -110,6 +65,7 @@ export const mutations = {
     state.countY = 1;
     state.answer = "";
     state.clear = false;
+    state.overCount = false;
     state.tweetText = "";
     state.ansewrLocation = "";
     state.userAnswerDistanceHistory = [""];
@@ -118,15 +74,13 @@ export const mutations = {
     state.userNowAnswer.splice();
     state.userAnswerHistory.splice();
     state.userAnswerHistory.splice();
-    console.log()
   },
   answerSettings: function (state, location) {
     state.answer = location.postal;
     state.ansewrLocation = location;
-
   },
   deleteNumber: function (state) {
-    if (state.countX < 1) {
+    if (state.countX <= 1) {
       return
     }
     state.userNowAnswer[state.countX - 2] = ""
@@ -140,6 +94,33 @@ export const mutations = {
       state.countX = 1
     }
 
+  },
+  tweetCreate: function (state) {
+    // ツイート内容を作成する
+    state.tweetText = "Postdle" + "　" + state.countY + "\/10 \u000D\u000A"
+    for (let i = 1; i <= state.countY; i++) {
+      state.tweetText = state.tweetText + "〒"
+      for (let j = 1; j <= 7; j++) {
+        const element = document.querySelector("#historyItem" + i + "-" + j);
+        if (!element) {
+          continue
+        }
+        if (element.classList.contains("number-correct")) {
+          state.tweetText = state.tweetText + "🟨"
+        } else if (element.classList.contains("number-place-correct")) {
+          state.tweetText = state.tweetText + "🟩"
+        } else if (element.classList.contains("number-nothing")) {
+          state.tweetText = state.tweetText + "⬛"
+        }
+        if (j === 3) {
+          state.tweetText = state.tweetText + "-"
+        }
+      }
+      state.tweetText = state.tweetText + "\u000D\u000A"
+    }
+    state.tweetText = state.tweetText + "正解は" + state.ansewrLocation.prefecture + state.ansewrLocation.city + state.ansewrLocation.town + "の郵便番号でした。"
+    state.tweetText = "http://twitter.com/share?url=https://postdle.netlify.app/&text=" + encodeURI(state.tweetText) + "&hashtags=Postdle";
+    window.open(state.tweetText, '_blank');
   }
 };
 export const actions = {
@@ -187,8 +168,6 @@ export const actions = {
         prefecture: todofukenList[cityIndex],
       }
     }).then((res) => {
-      console.log(res.data.response)
-
       if (res.status == 200 && res.data.response.error === undefined) {
         let postalIndex;
         if (res.data.response.location.length == 1) {
@@ -200,7 +179,6 @@ export const actions = {
           postalIndex = Math.floor(Math.random() * (max + 1 - min)) + min;
         }
         const answerLocation = res.data.response.location[postalIndex]
-        console.log("answerSettingsActions", answerLocation)
         commit("answerSettings", answerLocation);
       }
     }).catch((e) => {
@@ -209,5 +187,8 @@ export const actions = {
   },
   deleteNumber({ commit }) {
     commit("deleteNumber");
+  },
+  tweetCreate({ commit }) {
+    commit("tweetCreate");
   }
 };

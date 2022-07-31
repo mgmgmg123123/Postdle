@@ -1,23 +1,22 @@
 <template>
   <div class="clear-message">
-    <p>{{ $store.state.countY }}回で正解！</p>
-    <p>
+    <p>{{ $store.state.countY }}回でクリア！</p>
+    <p class="clear-message__location">
       正解は{{ $store.state.ansewrLocation.prefecture
       }}{{ $store.state.ansewrLocation.city
       }}{{ $store.state.ansewrLocation.town }}の&#12306;{{
         $store.state.ansewrLocation.postal | postalFormat
-      }}でした！
+      }}でした。
     </p>
     <!-- ツイートボタン -->
     <TweetButton />
   </div>
 </template>
-<script lang="ts">
+<script>
 export default {
   filters: {
-    postalFormat(parm: any) {
+    postalFormat(parm) {
       const response = parm.slice(0, 3) + "-" + parm.slice(3);
-      console.log("response", response);
       return response;
     },
   },
@@ -28,6 +27,9 @@ export default {
   text-align: center;
   font-size: 20px;
   margin-bottom: 24px;
+  &__location {
+    margin-bottom: 16px;
+  }
 }
 @media screen and (min-width: 700px) {
 }

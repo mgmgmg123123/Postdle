@@ -2,6 +2,7 @@
   <!-- ツイートボタン -->
   <div class="twitter-share-button__wrapper">
     <a
+      @click="tweet($store.state.countY, $event)"
       v-bind:href="$store.state.tweetText"
       target="_blank"
       class="twitter-share-button"
@@ -9,8 +10,20 @@
     >
   </div>
 </template>
-<script lang="ts">
-export default {};
+<script>
+export default {
+  methods: {
+    tweet(countY, event) {
+      event.preventDefault();
+      this.$store.dispatch("tweetCreate");
+      this.$gtag("event", "click", {
+        event_category: "clear",
+        event_label: "tweet-button",
+        value: countY,
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .twitter {

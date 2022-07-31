@@ -3,11 +3,6 @@
     <div class="history__inner">
       <HowToPlay />
       <!-- <h2>テスト用：{{ $store.state }}</h2> -->
-      <!--<h2>テスト用：{{ $store.state.usersAnswer }}</h2>
-      <h2>テスト用：{{ $store.state.answerHistory }}</h2> -->
-
-      <!-- <h2>テスト用：{{ $store.state.answer }},{{ $store.state }}</h2>
-      <p>ansewrLocation:{{ $store.state.ansewrLocation }}</p> -->
       <div class="answer__wrapper">
         <ul
           class="answer"
@@ -20,6 +15,7 @@
             v-for="x in 7"
             :key="x"
             v-bind:id="'historyItem' + y + '-' + x"
+            v-bind:class="getColorClass(x, y)"
           >
             {{ $store.state.userAnswerHistory[y - 1][x - 1] }}
           </li>
@@ -38,17 +34,52 @@
         </ul>
       </div>
       <ClearMessage v-if="$store.state.clear" />
+      <FailMessage v-if="!$store.state.clear && $store.state.overCount" />
       <Buttons />
     </div>
   </div>
 </template>
-<script lang="ts">
+<script>
 export default {
   filters: {
-    postalFormat(parm: any) {
+    postalFormat(parm) {
       const response = parm.slice(0, 3) + "-" + parm.slice(3);
-      console.log("response", response);
       return response;
+    },
+  },
+  methods: {
+    getColorClass(x, y) {
+      const reg = new RegExp(this.$store.state.userAnswerHistory[y - 1][x - 1]);
+      if (
+        this.$store.state.userAnswerHistory[y - 1][x - 1] ==
+        this.$store.state.answer.charAt(x - 1)
+      ) {
+        return {
+          "number-place-correct":
+            y < this.$store.state.countY ||
+            (this.$store.state.overCount && this.$store.state.countY == 10) ||
+            this.$store.state.clear,
+        };
+      } else if (
+        this.$store.state.answer.match(reg) &&
+        this.$store.state.userAnswerHistory[y - 1][x - 1] !== "" &&
+        this.$store.state.userAnswerHistory[y - 1][x - 1] !== undefined
+      ) {
+        return {
+          "number-correct":
+            y < this.$store.state.countY ||
+            (this.$store.state.overCount && this.$store.state.countY == 10),
+        };
+      } else if (y == 10 && this.$store.state.overCount) {
+        // １０回目で不正解の場合
+        return {
+          "number-nothing":
+            y < this.$store.state.countY ||
+            (this.$store.state.overCount && this.$store.state.countY == 10),
+        };
+      } else {
+        return { "number-nothing": y < this.$store.state.countY };
+      }
     },
   },
 };
@@ -56,23 +87,23 @@ export default {
 <style lang="scss" scoped>
 .answer {
   display: flex;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   position: relative;
   &__wrapper {
     padding: 24px 8px;
     position: relative;
-    max-width: 382px;
+    max-width: 343px;
     margin: auto;
   }
   &__number {
-    height: 48px;
+    height: 45px;
     width: 36px;
     border: 2px #c27e6f solid;
     border-radius: 2px;
     list-style: none;
     margin-right: 8px;
-    font-size: 28px;
-    line-height: normal;
+    font-size: 24px;
+    line-height: 40px;
     text-align: center;
   }
   &__number:nth-child(3) {
@@ -81,7 +112,7 @@ export default {
   &__number:nth-child(3)::after {
     content: "-";
     position: absolute;
-    top: -10px;
+    top: 0px;
     left: 115px;
     font-size: 42px;
     color: #c27e6f;
@@ -149,38 +180,37 @@ export default {
 }
 @media screen and (min-width: 700px) {
   .history__inner {
-    padding: 24px 8px;
+    padding: 36px 16px;
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     margin: auto;
   }
   /* 郵便番号欄 */
   .answer {
     &__wrapper {
-      max-width: 600px;
+      max-width: 400px;
       padding: 24px 0px 24px 28px;
     }
     &__number {
-      height: 75px;
-      width: 60px;
+      height: 50px;
+      width: 40px;
       font-size: 24px;
-      line-height: 70px;
+      line-height: 45px;
       border: 2px #c27e6f solid;
     }
     &__distance {
-      font-size: 24px;
+      font-size: 16px;
       width: 60px;
-      line-height: 75px;
+      line-height: 50px;
     }
     &__distance-nothingNo {
-      padding-top: 10px;
       font-size: 16px;
       width: 60px;
       line-height: 1;
     }
     &__number:nth-child(3)::after {
       top: 0px;
-      left: 198px;
+      left: 125px;
     }
   }
 }
