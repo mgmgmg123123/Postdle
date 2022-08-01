@@ -23,23 +23,8 @@ export default {
       posts: [],
     };
   },
-  async fetch(context) {
-    const { store } = context;
-    await axios
-      .get(getCityListUrl, {
-        params: {
-          prefecture: todofukenList[cityIndex],
-        },
-      })
-      .then((res) => {
-        let postalIndex = 0;
-        if (res.data.response.location.length > 1) {
-          const min = 0;
-          const max = res.data.response.location.length - 1;
-          postalIndex = Math.floor(Math.random() * (max + 1 - min)) + min;
-        }
-        store.commit("answerSettings", res.data.response.location[postalIndex]);
-      });
+  mounted() {
+    this.$store.dispatch("answerSettings");
   },
 };
 </script>
