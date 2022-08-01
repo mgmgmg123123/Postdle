@@ -118,7 +118,7 @@ export default {
     color: #c27e6f;
   }
   &__distance {
-    font-size: 16px;
+    font-size: 12px;
     width: 36px;
     line-height: 2;
     text-align: center;
@@ -126,9 +126,9 @@ export default {
     letter-spacing: -0.5px;
   }
   &__distance-nothingNo {
-    font-size: 12px;
+    font-size: 10px;
     width: 36px;
-    line-height: 1.2;
+    line-height: 1.3;
     text-align: center;
   }
 }
