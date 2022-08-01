@@ -20,6 +20,13 @@ export default {
       return response;
     },
   },
+  mounted() {
+    this.$gtag("event", "mounted", {
+      event_category: "clear",
+      event_label: "clear-message",
+      value: this.$store.state.countY,
+    });
+  },
 };
 </script>
 <style lang="scss" scoped>

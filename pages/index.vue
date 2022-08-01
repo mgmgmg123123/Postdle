@@ -12,7 +12,7 @@
 const axios = require("axios");
 const todofukenList = require("static/todofuken.json").todofukenList;
 const cityIndex = Math.floor(Math.random() * 47);
-const getCityListUrl = "http://geoapi.heartrails.com/api/json?method=getTowns";
+const getCityListUrl = "https://geoapi.heartrails.com/api/json?method=getTowns";
 export default {
   name: "Index",
   metaInfo: {
